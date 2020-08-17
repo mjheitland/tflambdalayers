@@ -137,10 +137,23 @@ resource "aws_iam_role_policy_attachment" "ENI-Policy" {
 # Lambda layer and function
 #--------------------------
 
+
+#--------------
+# zipping layer
+#--------------
+
+resource "null_resource" "zip_layer" {
+  triggers = { build_number = timestamp() }
+  provisioner "local-exec" {
+    command = "zip -r my_lambda_layer.zip ./python"
+  }
+}
+
 resource "aws_lambda_layer_version" "my_lambda_layer" {
   filename            = "my_lambda_layer.zip"
   layer_name          = "my_lambda_layer"
   compatible_runtimes = ["python3.7"]
+  depends_on = [ null_resource.zip_layer ]  
 }
 
 resource "aws_lambda_function" "mylambda" {
