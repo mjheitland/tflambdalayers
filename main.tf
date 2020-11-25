@@ -133,35 +133,34 @@ resource "aws_iam_role_policy_attachment" "ENI-Policy" {
 #}
 
 
-#--------------------------
-# Lambda layer and function
-#--------------------------
-
-
 #--------------
-# zipping layer
+# Lambda Layer
 #--------------
 
-resource "null_resource" "zip_layer" {
-  triggers = { build_number = timestamp() }
-  provisioner "local-exec" {
-    command = "zip -r my_lambda_layer.zip ./python"
-  }
+data "archive_file" "zip_layer" {
+  type        = "zip"
+  source_dir  = "./layers"
+  output_path = "my_lambda_layer.zip"
 }
 
 resource "aws_lambda_layer_version" "my_lambda_layer" {
   filename            = "my_lambda_layer.zip"
   layer_name          = "my_lambda_layer"
-  compatible_runtimes = ["python3.7"]
-  depends_on = [ null_resource.zip_layer ]  
+  compatible_runtimes = ["python3.8"]
+  source_code_hash    = data.archive_file.zip_layer.output_base64sha256
 }
+
+
+#--------------------------
+# Lambda Function
+#--------------------------
 
 resource "aws_lambda_function" "mylambda" {
   filename          = "mylambda.zip"
   function_name     = "mylambda"
   role              = aws_iam_role.mylambda.arn
   handler           = "mylambda.mylambda"
-  runtime           = "python3.7"
+  runtime           = "python3.8"
   description       = "A function to log to CloudWatch."
   source_code_hash  = data.archive_file.mylambda.output_base64sha256
   timeout           = 30
