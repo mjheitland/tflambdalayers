@@ -46,7 +46,9 @@ source .venv/bin/activate
 # Install all necessary packages that shall be included to the layer (e.g. 'requests')
 pip install requests -t temp
 
-# Move all files from 'temp' to 'layers/python/lib/python3.8/site-packages/'
+# Move all files from './temp' to './layers/python/lib/python3.8/site-packages/'
+mv temp/* layers/python/lib/python3.8/site-packages/
+rm -rf temp/
 
 # Leave virtual environment
 deactivate
