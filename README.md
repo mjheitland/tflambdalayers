@@ -40,8 +40,8 @@ python -V
 pyenv versions # or 'ls ~/.pyenv/versions/'
 
 # Create virutal environment
-python -m venv venv # in Python 2: virtualenv venv
-source venv/bin/activate
+python -m venv .venv # in Python 2: virtualenv .venv
+source .venv/bin/activate
 
 # Install all necessary packages that shall be included to the layer (e.g. 'requests')
 pip install requests -t temp
