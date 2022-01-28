@@ -1,6 +1,8 @@
 .terraform*
 .DS_Store
 *.swp
+temp
 terraform.tfstate
 terraform.tfstate.backup
+venv
 *.zip
