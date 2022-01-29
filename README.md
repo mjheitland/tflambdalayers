@@ -44,6 +44,7 @@ python -m venv .venv # in Python 2: virtualenv .venv
 source .venv/bin/activate
 
 # Install all necessary packages that shall be included to the layer (e.g. 'requests')
+pip show requests # lists version and dependencies of 'requests'
 pip install requests -t temp
 
 # Move all files from './temp' to './layers/python/lib/python3.8/site-packages/'
